@@ -3,6 +3,9 @@
 基于SSM Vue的垃圾分类管理
 
 角色：用户、片区管理员、总管理员
+<h2 id="uee142c35" class="ne-p"><span class="ne-text">视频演示</span></h2>
+&nbsp;
+<p style="text-align: center;"><strong><span class="ne-text">建议点击这个</span><a style="color: #ff0000;" href="https://www.bilibili.com/video/BV1kj411T7u3/?spm_id_from=333.999.0.0&amp;vd_source=b5789de9f485ad6d0cfaeca1ad4b230c">“链接”</a>查看高清视频</strong></p>
 
 （一）用户
 
