@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.demo.dao.ArticleTypeMapper">
+
+    <resultMap type="com.project.demo.entity.ArticleType" id="ArticleTypeResult">
+        <result property="typeId"    column="type_id"    />
+        <result property="display"    column="display"    />
+        <result property="name"    column="name"    />
+        <result property="fatherId"    column="father_id"    />
+        <result property="description"    column="description"    />
+        <result property="icon"    column="icon"    />
+        <result property="url"    column="url"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectArticleTypeVo">
+        select type_id, display, name, father_id, description, icon, url, create_time, update_time from article_type
+    </sql>
+
+    <select id="selectArticleTypeList" parameterType="com.project.demo.entity.ArticleType" resultMap="ArticleTypeResult">
+        <include refid="selectArticleTypeVo"/>
+        <where>
+            <if test="display != null "> and display = #{display}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="fatherId != null "> and father_id = #{fatherId}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="icon != null  and icon != ''"> and icon = #{icon}</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+        </where>
+    </select>
+
+    <select id="selectArticleTypeById" parameterType="Integer" resultMap="ArticleTypeResult">
+        <include refid="selectArticleTypeVo"/>
+        where type_id = #{typeId}
+    </select>
+
+    <insert id="insertArticleType" parameterType="com.project.demo.entity.ArticleType" useGeneratedKeys="true" keyProperty="typeId">
+        insert into article_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="display != null ">display,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="fatherId != null ">father_id,</if>
+            <if test="description != null  and description != ''">description,</if>
+            <if test="icon != null  and icon != ''">icon,</if>
+            <if test="url != null  and url != ''">url,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="display != null ">#{display},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="fatherId != null ">#{fatherId},</if>
+            <if test="description != null  and description != ''">#{description},</if>
+            <if test="icon != null  and icon != ''">#{icon},</if>
+            <if test="url != null  and url != ''">#{url},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateArticleType" parameterType="com.project.demo.entity.ArticleType">
+        update article_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="display != null ">display = #{display},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="fatherId != null ">father_id = #{fatherId},</if>
+            <if test="description != null  and description != ''">description = #{description},</if>
+            <if test="icon != null  and icon != ''">icon = #{icon},</if>
+            <if test="url != null  and url != ''">url = #{url},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where type_id = #{typeId}
+    </update>
+
+    <delete id="deleteArticleTypeById" parameterType="Integer">
+        delete from article_type where type_id = #{typeId}
+    </delete>
+
+    <delete id="deleteArticleTypeByIds" parameterType="String">
+        delete from article_type where type_id in
+        <foreach item="typeId" collection="array" open="(" separator="," close=")">
+            #{typeId}
+        </foreach>
+    </delete>
+
+</mapper>

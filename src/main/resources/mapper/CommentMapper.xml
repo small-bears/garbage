@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.demo.dao.CommentMapper">
+
+    <resultMap type="com.project.demo.entity.Comment" id="CommentResult">
+        <result property="commentId"    column="comment_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="replyToId"    column="reply_to_id"    />
+        <result property="content"    column="content"    />
+        <result property="nickname"    column="nickname"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="sourceTable"    column="source_table"    />
+        <result property="sourceField"    column="source_field"    />
+        <result property="sourceId"    column="source_id"    />
+    </resultMap>
+
+    <sql id="selectCommentVo">
+        select comment_id, user_id, reply_to_id, content, nickname, avatar, create_time, update_time, source_table, source_field, source_id from comment
+    </sql>
+
+    <select id="selectCommentList" parameterType="com.project.demo.entity.Comment" resultMap="CommentResult">
+        <include refid="selectCommentVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="replyToId != null "> and reply_to_id = #{replyToId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="nickname != null  and nickname != ''"> and nickname like concat('%', #{nickname}, '%')</if>
+            <if test="avatar != null  and avatar != ''"> and avatar = #{avatar}</if>
+            <if test="sourceTable != null  and sourceTable != ''"> and source_table = #{sourceTable}</if>
+            <if test="sourceField != null  and sourceField != ''"> and source_field = #{sourceField}</if>
+            <if test="sourceId != null "> and source_id = #{sourceId}</if>
+        </where>
+    </select>
+
+    <select id="selectCommentById" parameterType="Long" resultMap="CommentResult">
+        <include refid="selectCommentVo"/>
+        where comment_id = #{commentId}
+    </select>
+
+    <insert id="insertComment" parameterType="com.project.demo.entity.Comment" useGeneratedKeys="true" keyProperty="commentId">
+        insert into comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">user_id,</if>
+            <if test="replyToId != null ">reply_to_id,</if>
+            <if test="content != null  and content != ''">content,</if>
+            <if test="nickname != null  and nickname != ''">nickname,</if>
+            <if test="avatar != null  and avatar != ''">avatar,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="sourceTable != null  and sourceTable != ''">source_table,</if>
+            <if test="sourceField != null  and sourceField != ''">source_field,</if>
+            <if test="sourceId != null ">source_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">#{userId},</if>
+            <if test="replyToId != null ">#{replyToId},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="nickname != null  and nickname != ''">#{nickname},</if>
+            <if test="avatar != null  and avatar != ''">#{avatar},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="sourceTable != null  and sourceTable != ''">#{sourceTable},</if>
+            <if test="sourceField != null  and sourceField != ''">#{sourceField},</if>
+            <if test="sourceId != null ">#{sourceId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateComment" parameterType="com.project.demo.entity.Comment">
+        update comment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null ">user_id = #{userId},</if>
+            <if test="replyToId != null ">reply_to_id = #{replyToId},</if>
+            <if test="content != null  and content != ''">content = #{content},</if>
+            <if test="nickname != null  and nickname != ''">nickname = #{nickname},</if>
+            <if test="avatar != null  and avatar != ''">avatar = #{avatar},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="sourceTable != null  and sourceTable != ''">source_table = #{sourceTable},</if>
+            <if test="sourceField != null  and sourceField != ''">source_field = #{sourceField},</if>
+            <if test="sourceId != null ">source_id = #{sourceId},</if>
+        </trim>
+        where comment_id = #{commentId}
+    </update>
+
+    <delete id="deleteCommentById" parameterType="Long">
+        delete from comment where comment_id = #{commentId}
+    </delete>
+
+    <delete id="deleteCommentByIds" parameterType="String">
+        delete from comment where comment_id in
+        <foreach item="commentId" collection="array" open="(" separator="," close=")">
+            #{commentId}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.demo.dao.ArticleMapper">
+
+    <resultMap type="com.project.demo.entity.Article" id="ArticleResult">
+        <result property="articleId"    column="article_id"    />
+        <result property="title"    column="title"    />
+        <result property="type"    column="type"    />
+        <result property="hits"    column="hits"    />
+        <result property="praise_len"    column="praise_len"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="source"    column="source"    />
+        <result property="url"    column="url"    />
+        <result property="tag"    column="tag"    />
+        <result property="content"    column="content"    />
+        <result property="img"    column="img"    />
+        <result property="description"    column="description"    />
+    </resultMap>
+
+    <sql id="selectArticleVo">
+        select article_id, title, type, hits, praise_len, create_time, update_time, source, url, tag, content, img, description from article
+    </sql>
+
+    <select id="selectArticleList" parameterType="com.project.demo.entity.Article" resultMap="ArticleResult">
+        <include refid="selectArticleVo"/>
+        <where>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="hits != null "> and hits = #{hits}</if>
+            <if test="praiseLen != null "> and praise_len = #{praiseLen}</if>
+            <if test="source != null  and source != ''"> and source = #{source}</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="tag != null  and tag != ''"> and tag = #{tag}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="img != null  and img != ''"> and img = #{img}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+        </where>
+    </select>
+
+    <select id="selectArticleById" parameterType="Integer" resultMap="ArticleResult">
+        <include refid="selectArticleVo"/>
+        where article_id = #{articleId}
+    </select>
+
+    <insert id="insertArticle" parameterType="com.project.demo.entity.Article" useGeneratedKeys="true" keyProperty="articleId">
+        insert into article
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != ''">title,</if>
+            <if test="type != null  and type != ''">type,</if>
+            <if test="hits != null ">hits,</if>
+            <if test="praiseLen != null ">praise_len,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="source != null  and source != ''">source,</if>
+            <if test="url != null  and url != ''">url,</if>
+            <if test="tag != null  and tag != ''">tag,</if>
+            <if test="content != null  and content != ''">content,</if>
+            <if test="img != null  and img != ''">img,</if>
+            <if test="description != null  and description != ''">description,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="hits != null ">#{hits},</if>
+            <if test="praiseLen != null ">#{praiseLen},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="source != null  and source != ''">#{source},</if>
+            <if test="url != null  and url != ''">#{url},</if>
+            <if test="tag != null  and tag != ''">#{tag},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="img != null  and img != ''">#{img},</if>
+            <if test="description != null  and description != ''">#{description},</if>
+         </trim>
+    </insert>
+
+    <update id="updateArticle" parameterType="com.project.demo.entity.Article">
+        update article
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null  and title != ''">title = #{title},</if>
+            <if test="type != null  and type != ''">type = #{type},</if>
+            <if test="hits != null ">hits = #{hits},</if>
+            <if test="praiseLen != null ">praise_len = #{praiseLen},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="source != null  and source != ''">source = #{source},</if>
+            <if test="url != null  and url != ''">url = #{url},</if>
+            <if test="tag != null  and tag != ''">tag = #{tag},</if>
+            <if test="content != null  and content != ''">content = #{content},</if>
+            <if test="img != null  and img != ''">img = #{img},</if>
+            <if test="description != null  and description != ''">description = #{description},</if>
+        </trim>
+        where article_id = #{articleId}
+    </update>
+
+    <delete id="deleteArticleById" parameterType="Integer">
+        delete from article where article_id = #{articleId}
+    </delete>
+
+    <delete id="deleteArticleByIds" parameterType="String">
+        delete from article where article_id in
+        <foreach item="articleId" collection="array" open="(" separator="," close=")">
+            #{articleId}
+        </foreach>
+    </delete>
+
+</mapper>

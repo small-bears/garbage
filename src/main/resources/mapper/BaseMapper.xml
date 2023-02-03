@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.demo.dao.base.BaseMapper">
+
+    <select id="selectBaseList" resultType="java.util.LinkedHashMap">
+        ${select}
+    </select>
+
+    <select id="selectBaseCount" resultType="Integer">
+        ${count}
+    </select>
+
+    <select id="selectBaseOne" resultType="Object">
+        ${select}
+    </select>
+
+    <update id="updateBaseSql">
+        ${sql}
+    </update>
+
+    <delete id="deleteBaseSql">
+        ${sql}
+    </delete>
+
+</mapper>

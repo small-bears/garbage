@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.demo.dao.AuthMapper">
+
+    <resultMap type="com.project.demo.entity.Auth" id="AuthResult">
+        <result property="authId"    column="auth_id"    />
+        <result property="userGroup"    column="user_group"    />
+        <result property="modName"    column="mod_name"    />
+        <result property="tableName"    column="table_name"    />
+        <result property="pageTitle"    column="page_title"    />
+        <result property="path"    column="path"    />
+        <result property="position"    column="position"    />
+        <result property="mode"    column="mode"    />
+        <result property="add"    column="add"    />
+        <result property="del"    column="del"    />
+        <result property="set"    column="set"    />
+        <result property="get"    column="get"    />
+        <result property="fieldAdd"    column="field_add"    />
+        <result property="fieldSet"    column="field_set"    />
+        <result property="fieldGet"    column="field_get"    />
+        <result property="tableNavName"    column="table_nav_name"    />
+        <result property="tableNav"    column="table_nav"    />
+        <result property="option"    column="option"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectAuthVo">
+        select auth_id, user_group, mod_name, table_name, page_title, path, position, mode, add, del, set, get, field_add, field_set, field_get, table_nav_name, table_nav, option, create_time, update_time from auth
+    </sql>
+
+    <select id="selectAuthList" parameterType="com.project.demo.entity.Auth" resultMap="AuthResult">
+        <include refid="selectAuthVo"/>
+        <where>
+            <if test="userGroup != null  and userGroup != ''"> and user_group = #{userGroup}</if>
+            <if test="modName != null  and modName != ''"> and mod_name like concat('%', #{modName}, '%')</if>
+            <if test="tableName != null  and tableName != ''"> and table_name like concat('%', #{tableName}, '%')</if>
+            <if test="pageTitle != null  and pageTitle != ''"> and page_title = #{pageTitle}</if>
+            <if test="path != null  and path != ''"> and path = #{path}</if>
+            <if test="position != null  and position != ''"> and position = #{position}</if>
+            <if test="mode != null  and mode != ''"> and mode = #{mode}</if>
+            <if test="add != null "> and add = #{add}</if>
+            <if test="del != null "> and del = #{del}</if>
+            <if test="set != null "> and set = #{set}</if>
+            <if test="get != null "> and get = #{get}</if>
+            <if test="fieldAdd != null  and fieldAdd != ''"> and field_add = #{fieldAdd}</if>
+            <if test="fieldSet != null  and fieldSet != ''"> and field_set = #{fieldSet}</if>
+            <if test="fieldGet != null  and fieldGet != ''"> and field_get = #{fieldGet}</if>
+            <if test="tableNavName != null  and tableNavName != ''"> and table_nav_name like concat('%', #{tableNavName}, '%')</if>
+            <if test="tableNav != null  and tableNav != ''"> and table_nav = #{tableNav}</if>
+            <if test="option != null  and option != ''"> and option = #{option}</if>
+        </where>
+    </select>
+
+    <select id="selectAuthById" parameterType="Long" resultMap="AuthResult">
+        <include refid="selectAuthVo"/>
+        where auth_id = #{authId}
+    </select>
+
+    <insert id="insertAuth" parameterType="com.project.demo.entity.Auth" useGeneratedKeys="true" keyProperty="authId">
+        insert into auth
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userGroup != null  and userGroup != ''">user_group,</if>
+            <if test="modName != null  and modName != ''">mod_name,</if>
+            <if test="tableName != null  and tableName != ''">table_name,</if>
+            <if test="pageTitle != null  and pageTitle != ''">page_title,</if>
+            <if test="path != null  and path != ''">path,</if>
+            <if test="position != null  and position != ''">position,</if>
+            <if test="mode != null  and mode != ''">mode,</if>
+            <if test="add != null ">add,</if>
+            <if test="del != null ">del,</if>
+            <if test="set != null ">set,</if>
+            <if test="get != null ">get,</if>
+            <if test="fieldAdd != null  and fieldAdd != ''">field_add,</if>
+            <if test="fieldSet != null  and fieldSet != ''">field_set,</if>
+            <if test="fieldGet != null  and fieldGet != ''">field_get,</if>
+            <if test="tableNavName != null  and tableNavName != ''">table_nav_name,</if>
+            <if test="tableNav != null  and tableNav != ''">table_nav,</if>
+            <if test="option != null  and option != ''">option,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userGroup != null  and userGroup != ''">#{userGroup},</if>
+            <if test="modName != null  and modName != ''">#{modName},</if>
+            <if test="tableName != null  and tableName != ''">#{tableName},</if>
+            <if test="pageTitle != null  and pageTitle != ''">#{pageTitle},</if>
+            <if test="path != null  and path != ''">#{path},</if>
+            <if test="position != null  and position != ''">#{position},</if>
+            <if test="mode != null  and mode != ''">#{mode},</if>
+            <if test="add != null ">#{add},</if>
+            <if test="del != null ">#{del},</if>
+            <if test="set != null ">#{set},</if>
+            <if test="get != null ">#{get},</if>
+            <if test="fieldAdd != null  and fieldAdd != ''">#{fieldAdd},</if>
+            <if test="fieldSet != null  and fieldSet != ''">#{fieldSet},</if>
+            <if test="fieldGet != null  and fieldGet != ''">#{fieldGet},</if>
+            <if test="tableNavName != null  and tableNavName != ''">#{tableNavName},</if>
+            <if test="tableNav != null  and tableNav != ''">#{tableNav},</if>
+            <if test="option != null  and option != ''">#{option},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAuth" parameterType="com.project.demo.entity.Auth">
+        update auth
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userGroup != null  and userGroup != ''">user_group = #{userGroup},</if>
+            <if test="modName != null  and modName != ''">mod_name = #{modName},</if>
+            <if test="tableName != null  and tableName != ''">table_name = #{tableName},</if>
+            <if test="pageTitle != null  and pageTitle != ''">page_title = #{pageTitle},</if>
+            <if test="path != null  and path != ''">path = #{path},</if>
+            <if test="position != null  and position != ''">position = #{position},</if>
+            <if test="mode != null  and mode != ''">mode = #{mode},</if>
+            <if test="add != null ">add = #{add},</if>
+            <if test="del != null ">del = #{del},</if>
+            <if test="set != null ">set = #{set},</if>
+            <if test="get != null ">get = #{get},</if>
+            <if test="fieldAdd != null  and fieldAdd != ''">field_add = #{fieldAdd},</if>
+            <if test="fieldSet != null  and fieldSet != ''">field_set = #{fieldSet},</if>
+            <if test="fieldGet != null  and fieldGet != ''">field_get = #{fieldGet},</if>
+            <if test="tableNavName != null  and tableNavName != ''">table_nav_name = #{tableNavName},</if>
+            <if test="tableNav != null  and tableNav != ''">table_nav = #{tableNav},</if>
+            <if test="option != null  and option != ''">option = #{option},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where auth_id = #{authId}
+    </update>
+
+    <delete id="deleteAuthById" parameterType="Long">
+        delete from auth where auth_id = #{authId}
+    </delete>
+
+    <delete id="deleteAuthByIds" parameterType="String">
+        delete from auth where auth_id in
+        <foreach item="authId" collection="array" open="(" separator="," close=")">
+            #{authId}
+        </foreach>
+    </delete>
+
+</mapper>

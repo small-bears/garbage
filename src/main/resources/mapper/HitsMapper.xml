@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.demo.dao.HitsMapper">
+
+    <resultMap type="com.project.demo.entity.Hits" id="HitsResult">
+        <result property="hitsId"    column="hits_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="sourceTable"    column="source_table"    />
+        <result property="sourceField"    column="source_field"    />
+        <result property="sourceId"    column="source_id"    />
+    </resultMap>
+
+    <sql id="selectHitsVo">
+        select hits_id, user_id, create_time, update_time, source_table, source_field, source_id from hits
+    </sql>
+
+    <select id="selectHitsList" parameterType="com.project.demo.entity.Hits" resultMap="HitsResult">
+        <include refid="selectHitsVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="sourceTable != null  and sourceTable != ''"> and source_table = #{sourceTable}</if>
+            <if test="sourceField != null  and sourceField != ''"> and source_field = #{sourceField}</if>
+            <if test="sourceId != null "> and source_id = #{sourceId}</if>
+        </where>
+    </select>
+
+    <select id="selectHitsById" parameterType="Integer" resultMap="HitsResult">
+        <include refid="selectHitsVo"/>
+        where hits_id = #{hitsId}
+    </select>
+
+    <insert id="insertHits" parameterType="com.project.demo.entity.Hits" useGeneratedKeys="true" keyProperty="hitsId">
+        insert into hits
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">user_id,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="sourceTable != null  and sourceTable != ''">source_table,</if>
+            <if test="sourceField != null  and sourceField != ''">source_field,</if>
+            <if test="sourceId != null ">source_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">#{userId},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="sourceTable != null  and sourceTable != ''">#{sourceTable},</if>
+            <if test="sourceField != null  and sourceField != ''">#{sourceField},</if>
+            <if test="sourceId != null ">#{sourceId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHits" parameterType="com.project.demo.entity.Hits">
+        update hits
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null ">user_id = #{userId},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="sourceTable != null  and sourceTable != ''">source_table = #{sourceTable},</if>
+            <if test="sourceField != null  and sourceField != ''">source_field = #{sourceField},</if>
+            <if test="sourceId != null ">source_id = #{sourceId},</if>
+        </trim>
+        where hits_id = #{hitsId}
+    </update>
+
+    <delete id="deleteHitsById" parameterType="Integer">
+        delete from hits where hits_id = #{hitsId}
+    </delete>
+
+    <delete id="deleteHitsByIds" parameterType="String">
+        delete from hits where hits_id in
+        <foreach item="hitsId" collection="array" open="(" separator="," close=")">
+            #{hitsId}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.demo.dao.UserGroupMapper">
+
+    <resultMap type="com.project.demo.entity.UserGroup" id="UserGroupResult">
+        <result property="groupId"    column="group_id"    />
+        <result property="display"    column="display"    />
+        <result property="name"    column="name"    />
+        <result property="description"    column="description"    />
+        <result property="sourceTable"    column="source_table"    />
+        <result property="sourceField"    column="source_field"    />
+        <result property="register"    column="register"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectUserGroupVo">
+        select group_id, display, name, description, source_table, source_field, source_id, register, create_time, update_time from user_group
+    </sql>
+
+    <select id="selectUserGroupList" parameterType="com.project.demo.entity.UserGroup" resultMap="UserGroupResult">
+        <include refid="selectUserGroupVo"/>
+        <where>
+            <if test="display != null "> and display = #{display}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="sourceTable != null  and sourceTable != ''"> and source_table = #{sourceTable}</if>
+            <if test="sourceField != null  and sourceField != ''"> and source_field = #{sourceField}</if>
+            <if test="register != null "> and register = #{register}</if>
+        </where>
+    </select>
+
+    <select id="selectUserGroupById" parameterType="Integer" resultMap="UserGroupResult">
+        <include refid="selectUserGroupVo"/>
+        where group_id = #{groupId}
+    </select>
+
+    <insert id="insertUserGroup" parameterType="com.project.demo.entity.UserGroup" useGeneratedKeys="true" keyProperty="groupId">
+        insert into user_group
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="display != null ">display,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="description != null  and description != ''">description,</if>
+            <if test="sourceTable != null  and sourceTable != ''">source_table,</if>
+            <if test="sourceField != null  and sourceField != ''">source_field,</if>
+            <if test="register != null ">register,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="display != null ">#{display},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="description != null  and description != ''">#{description},</if>
+            <if test="sourceTable != null  and sourceTable != ''">#{sourceTable},</if>
+            <if test="sourceField != null  and sourceField != ''">#{sourceField},</if>
+            <if test="register != null ">#{register},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserGroup" parameterType="com.project.demo.entity.UserGroup">
+        update user_group
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="display != null ">display = #{display},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="description != null  and description != ''">description = #{description},</if>
+            <if test="sourceTable != null  and sourceTable != ''">source_table = #{sourceTable},</if>
+            <if test="sourceField != null  and sourceField != ''">source_field = #{sourceField},</if>
+            <if test="register != null ">register = #{register},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where group_id = #{groupId}
+    </update>
+
+    <delete id="deleteUserGroupById" parameterType="Integer">
+        delete from user_group where group_id = #{groupId}
+    </delete>
+
+    <delete id="deleteUserGroupByIds" parameterType="String">
+        delete from user_group where group_id in
+        <foreach item="groupId" collection="array" open="(" separator="," close=")">
+            #{groupId}
+        </foreach>
+    </delete>
+
+</mapper>

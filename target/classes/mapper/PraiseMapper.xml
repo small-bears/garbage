@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.demo.dao.PraiseMapper">
+
+    <resultMap type="com.project.demo.entity.Praise" id="PraiseResult">
+        <result property="praiseId"    column="praise_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="sourceTable"    column="source_table"    />
+        <result property="sourceField"    column="source_field"    />
+        <result property="sourceId"    column="source_id"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectPraiseVo">
+        select praise_id, user_id, create_time, update_time, source_table, source_field, source_id, status from praise
+    </sql>
+
+    <select id="selectPraiseList" parameterType="com.project.demo.entity.Praise" resultMap="PraiseResult">
+        <include refid="selectPraiseVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="sourceTable != null  and sourceTable != ''"> and source_table = #{sourceTable}</if>
+            <if test="sourceField != null  and sourceField != ''"> and source_field = #{sourceField}</if>
+            <if test="sourceId != null "> and source_id = #{sourceId}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectPraiseById" parameterType="Integer" resultMap="PraiseResult">
+        <include refid="selectPraiseVo"/>
+        where praise_id = #{praiseId}
+    </select>
+
+    <insert id="insertPraise" parameterType="com.project.demo.entity.Praise" useGeneratedKeys="true" keyProperty="praiseId">
+        insert into praise
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">user_id,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="sourceTable != null  and sourceTable != ''">source_table,</if>
+            <if test="sourceField != null  and sourceField != ''">source_field,</if>
+            <if test="sourceId != null ">source_id,</if>
+            <if test="status != null ">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">#{userId},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="sourceTable != null  and sourceTable != ''">#{sourceTable},</if>
+            <if test="sourceField != null  and sourceField != ''">#{sourceField},</if>
+            <if test="sourceId != null ">#{sourceId},</if>
+            <if test="status != null ">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePraise" parameterType="com.project.demo.entity.Praise">
+        update praise
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null ">user_id = #{userId},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="sourceTable != null  and sourceTable != ''">source_table = #{sourceTable},</if>
+            <if test="sourceField != null  and sourceField != ''">source_field = #{sourceField},</if>
+            <if test="sourceId != null ">source_id = #{sourceId},</if>
+            <if test="status != null ">status = #{status},</if>
+        </trim>
+        where praise_id = #{praiseId}
+    </update>
+
+    <delete id="deletePraiseById" parameterType="Integer">
+        delete from praise where praise_id = #{praiseId}
+    </delete>
+
+    <delete id="deletePraiseByIds" parameterType="String">
+        delete from praise where praise_id in
+        <foreach item="praiseId" collection="array" open="(" separator="," close=")">
+            #{praiseId}
+        </foreach>
+    </delete>
+
+</mapper>
